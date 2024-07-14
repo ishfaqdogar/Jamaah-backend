@@ -12,7 +12,7 @@ class UserService (
     private val userRepository : UserRepository,
     private val encoder: PasswordEncoder
 ) {
-    fun createUser(userRequest: UserRequest) : Any? {
+    fun createUser(userRequest: UserRequest) : User? {
         val found = userRepository.findByEmail(userRequest.email)
 
         return if(found == null){
@@ -37,6 +37,8 @@ class UserService (
         userRepository.findById(uuid).orElse(null)
        // userRepository.findByUUID(uuid)
 
+    fun findByEmail(email: String): User? =
+        userRepository.findByEmail(email)
 
     fun deleteByUUID(uuid: UUID): Boolean {
         val memberExists = userRepository.existsById(uuid)

@@ -20,12 +20,25 @@ class AuthenticationService(
     private val refreshTokenRepository: RefreshTokenRepository
 ){
     fun authentication(authRequest: AuthenticationRequest) : AuthenticationResponse {
-        authManager.authenticate(
-            UsernamePasswordAuthenticationToken(
-                authRequest.email,
-                authRequest.password
+
+        try {
+            authManager.authenticate(
+                UsernamePasswordAuthenticationToken(
+                    authRequest.email,
+                    authRequest.password
+                )
             )
-        )
+            //val result = "pass"
+
+        } catch (e: Exception) {
+            // Handle authentication failure
+            //val result = "failed"
+            return AuthenticationResponse(
+                result = 0,
+                accessToken = "authentication failed"
+                //refreshToken = refreshToken
+            )
+        }
 
         val user = userDetailsService.loadUserByUsername(authRequest.email)
 
@@ -36,8 +49,9 @@ class AuthenticationService(
         refreshTokenRepository.save(refreshToken, user)
 
         return AuthenticationResponse(
-            accessToken = accessToken,
-            refreshToken = refreshToken
+            result = 1,
+            accessToken = accessToken
+            //refreshToken = refreshToken
         )
     }
 

@@ -1,11 +1,9 @@
 package com.rg.jamaah.repository
 
-import com.rg.jamaah.model.Member
-import com.rg.jamaah.model.Role
+
 import com.rg.jamaah.model.User
 import org.springframework.data.mongodb.repository.MongoRepository
-import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.stereotype.Repository
+
 import java.util.*
 
 interface UserRepository : MongoRepository<User, UUID> {

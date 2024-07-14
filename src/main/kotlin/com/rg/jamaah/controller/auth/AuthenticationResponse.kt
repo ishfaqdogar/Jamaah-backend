@@ -1,8 +1,9 @@
 package com.rg.jamaah.controller.auth
 
 data class AuthenticationResponse (
-    val accessToken: String,
-    val refreshToken: String,
+    val result : Int,
+    val accessToken: String
+   // val refreshToken: String,
 )
 
 

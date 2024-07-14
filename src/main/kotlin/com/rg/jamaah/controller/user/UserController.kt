@@ -2,12 +2,10 @@ package com.rg.jamaah.controller.user
 
 import com.rg.jamaah.controller.auth.AuthController
 import com.rg.jamaah.controller.auth.AuthenticationRequest
-import com.rg.jamaah.controller.member.MemberRequest
-import com.rg.jamaah.model.Role
+
 import com.rg.jamaah.model.User
 import com.rg.jamaah.model.UserRequest
 import com.rg.jamaah.model.UserResponse
-import com.rg.jamaah.service.AuthenticationService
 import com.rg.jamaah.service.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -22,9 +20,6 @@ import org.springframework.web.server.ResponseStatusException
 import java.util.*
 import kotlin.collections.List
 
-
-
-
 @RestController
 @RequestMapping("/api/user")
 class UserController(
@@ -32,36 +27,31 @@ class UserController(
     private val authController: AuthController
 ) {
     @PostMapping
-    fun createUser(@RequestBody userRequest: UserRequest): Any? {
+    fun createUser(@RequestBody userRequest: UserRequest) : ResponseEntity<Any> {
 
         val result= userService.createUser(userRequest)
         if(result == null){
-            return mapOf(
+
+            val responseBody = mapOf(
                 "result" to 0,
-                "msg" to "Email already exist"
+                "msg" to "Email already exist",
+                "data" to ""
 
             )
+            return ResponseEntity(responseBody, HttpStatus.OK)
+
 
         }else{
-            //val authRequest = AuthenticationRequest(email = "john.doe@example.com", password = "password123")
-            //val authResponse = authController.anotherFunction(authRequest)
-            //test comments
 
-
-            return mapOf(
-                "result" to 1,
-                "msg" to "User created successfully"
-            )
-           /* return mapOf(
+            val authRequest = AuthenticationRequest(email = userRequest.email, password = userRequest.password)
+            val authResponse = authController.anotherFunction(authRequest)
+            val responseBody = mapOf(
                 "result" to 1,
                 "msg" to "User created successfully",
-                "token" to authResponse,
-                "email" to userRequest.email,
-                "email" to result["email"]
-
+                "token" to authResponse.accessToken
             )
+            return ResponseEntity(responseBody, HttpStatus.OK)
 
-            */
         }
 
     }
